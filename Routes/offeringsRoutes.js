@@ -22,26 +22,27 @@ var routes = function (Offering) {
             })
         })
 
+    offeringRouter.use('/:offeringId', function (req, res, next) {
+        Offering.findById(req.params.offeringId, function (err, offering) {
+            if (err)
+                res.status(500).send(err)
+            else if (offering) {
+                req.offering = offering
+                next()
+            } else
+                res.status(404).send('no offering found')
+        })
+
+    })
     offeringRouter.route('/:offeringId')
         .get(function (req, res) {
-            Offering.findById(req.params.offeringId, function (err, offering) {
-                if (err)
-                    res.status(500).send(err)
-                else
-                    res.json(offering)
-            })
+            res.json(req.offering)
         })
         .put(function (req, res) {
-            Offering.findById(req.params.offeringId, function (err, offering) {
-                if (err)
-                    res.status(500).send(err)
-                else {
-                    offering.cusipId = req.body.cusipId
-                    offering.description = req.body.description
-                    offering.save()
-                    res.json(offering)
-                }
-            })
+            req.offering.cusipId = req.body.cusipId
+            req.offering.description = req.body.description
+            req.offering.save()
+            res.json(req.offering)
         })
 
     return offeringRouter
