@@ -12,38 +12,9 @@ var port = process.env.PORT || 3000;
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use(bodyParser.json())
 
-var offeringRouter = express.Router();
+offeringRouter = require('./Routes/offeringsRoutes')(Offering)
 
-offeringRouter.route('/Offerings')
-    .post(function (req, res) {
-        var offering = new Offering(req.body)
-        offering.save()
-        res.status(201).send(offering)
-    })
-    .get(function (req, res) {
-        var query = {}
-        if (req.query.cusipId) {
-            query.cusipId = req.query.cusipId
-        }
-        Offering.find(query, function (err, offerings) {
-            if (err)
-                res.status(500).send(err)
-            else
-                res.json(offerings)
-        })
-    })
-
-offeringRouter.route('/Offerings/:offeringId')
-    .get(function (req, res) {
-        Offering.findById(req.params.offeringId, function (err, offering) {
-            if (err)
-                res.status(500).send(err)
-            else
-                res.json(offering)
-        })
-    })
-
-app.use('/api', offeringRouter)
+app.use('/api/Offerings', offeringRouter)
 
 app.get('/', (req, res) => res.send('hello world!'))
 
