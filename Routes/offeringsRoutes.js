@@ -31,6 +31,18 @@ var routes = function (Offering) {
                     res.json(offering)
             })
         })
+        .put(function (req, res) {
+            Offering.findById(req.params.offeringId, function (err, offering) {
+                if (err)
+                    res.status(500).send(err)
+                else {
+                    offering.cusipId = req.body.cusipId
+                    offering.description = req.body.description
+                    offering.save()
+                    res.json(offering)
+                }
+            })
+        })
 
     return offeringRouter
 }
