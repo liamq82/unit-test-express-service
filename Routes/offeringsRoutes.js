@@ -5,18 +5,7 @@ var routes = function (Offering) {
     var offeringController = require('../controller/offeringController')(Offering)
     offeringRouter.route('/')
         .post(offeringController.post)
-        .get(function (req, res) {
-            var query = {}
-            if (req.query.cusipId) {
-                query.cusipId = req.query.cusipId
-            }
-            Offering.find(query, function (err, offerings) {
-                if (err)
-                    res.status(500).send(err)
-                else
-                    res.json(offerings)
-            })
-        })
+        .get(offeringController.get)
 
     offeringRouter.use('/:offeringId', function (req, res, next) {
         Offering.findById(req.params.offeringId, function (err, offering) {
