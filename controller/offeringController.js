@@ -19,8 +19,8 @@ var offeringController = function (Offering) {
     }
 
     return {
-        post,
-        get
+        post: post,
+        get: get
     }
 }
 
