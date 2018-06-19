@@ -2,13 +2,9 @@ var express = require('express')
 
 var routes = function (Offering) {
     var offeringRouter = express.Router();
-
+    var offeringController = require('../controller/offeringController')(Offering)
     offeringRouter.route('/')
-        .post(function (req, res) {
-            var offering = new Offering(req.body)
-            offering.save()
-            res.status(201).send(offering)
-        })
+        .post(offeringController.post)
         .get(function (req, res) {
             var query = {}
             if (req.query.cusipId) {
