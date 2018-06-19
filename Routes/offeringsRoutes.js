@@ -41,8 +41,35 @@ var routes = function (Offering) {
         .put(function (req, res) {
             req.offering.cusipId = req.body.cusipId
             req.offering.description = req.body.description
-            req.offering.save()
-            res.json(req.offering)
+            req.offering.save(function (err) {
+                if (err)
+                    res.status(500).send(err)
+                else
+                    res.json(req.offering)
+            })
+        })
+        .patch(function (req, res) {
+            if (req.body._id)
+                delete req.body._id
+
+            for (var key in req.body) {
+                req.offering[key] = req.body[key]
+            }
+
+            req.offering.save(function (err) {
+                if (err)
+                    res.status(500).send(err)
+                else
+                    res.json(req.offering)
+            })
+        })
+        .delete(function (req, res) {
+            req.offering.remove(function (err) {
+                if (err)
+                    res.status(500).send(err)
+                else
+                    res.status(204).send('Removed')
+            })
         })
 
     return offeringRouter
