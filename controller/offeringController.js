@@ -1,8 +1,16 @@
 var offeringController = function (Offering) {
     var post = function (req, res) {
         var offering = new Offering(req.body)
-        offering.save()
-        res.status(201).send(offering)
+
+        if (!req.body.cusipId) {
+            res.status(400)
+            res.send('Cusip ID is required')
+        } else {
+            offering.save()
+            res.status(201)
+            res.send(offering)
+        }
+
     }
 
     var get = function (req, res) {
