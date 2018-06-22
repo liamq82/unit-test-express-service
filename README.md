@@ -3,6 +3,17 @@ gulp
 
 App will automatically restart on save of changes.
 
+Tests
+<hr>
+To run all tests:
+gulp test
+
+To debug a test:
+<hr>
+Open debugger in visuale code.
+Select 'run mocha' in run configurations beside green arrow.
+Click run
+
 MONGODB
 Start MongoDB
 sudo service mongod start
