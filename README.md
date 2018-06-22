@@ -12,7 +12,7 @@ Open debugger in visuale code.
 Select 'run mocha' in run configurations beside green arrow.
 Click run
 
-MONGODB
+<h2>MONGODB</h2>
 Start MongoDB
 sudo service mongod start
 
@@ -29,7 +29,7 @@ Show DBs: show dbs
 Show Collections: show collections
 https://docs.mongodb.com/manual/tutorial/install-mongodb-enterprise-on-ubuntu/
 
-Database Information
+<h2>Database Information</h2>
 Offerings located in 'offeringAPI' database.
 Offering collection located in 'offerings' collection.
 Import data into db: mongo offeringAPI < offerings.js
