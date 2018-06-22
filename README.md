@@ -3,11 +3,11 @@ gulp
 
 App will automatically restart on save of changes.
 
-<h2>Tests<h2>
+<h2>Tests</h2>
 To run all tests:
 gulp test
 
-<h2>To debug a test:<h2>
+<h2>To debug a test:</h2>
 Open debugger in visuale code.
 Select 'run mocha' in run configurations beside green arrow.
 Click run
