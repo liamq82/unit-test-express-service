@@ -19,8 +19,10 @@ var offeringController = function (Offering) {
             query.cusipId = req.query.cusipId
         }
         Offering.find(query, function (err, offerings) {
-            if (err)
-                res.status(500).send(err)
+            if (err) {
+                res.status(500)
+                res.send(err)
+            }
             else
                 res.json(offerings)
         })
