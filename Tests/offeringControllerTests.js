@@ -189,4 +189,55 @@ describe('Offering Controller Tests:', function () {
             res.json.calledWith(retrievedOffering).should.equal(true, 'GET by ID did not return offering')
         })
     })
+
+    describe('PUT', function () {
+
+        var offeringController = require('../controller/offeringController')()
+        var reqWithSaveError = {
+            body: {
+                cusipId: '12345',
+                description: 'offering to put'
+            },
+            offering: {
+                save: function (cb) {
+                    cb('error')
+                }
+            }
+        }
+
+        var offeringToSave = {
+            cusipId: '12345',
+            description: 'succesfully saved offering'
+        }
+        var reqWithSuccessfulSave = {
+            body: offeringToSave,
+            offering: {
+                save: function (cb) {
+                    cb(null)
+                }
+            }
+        }
+        var res;
+
+        beforeEach(function () {
+            res = {
+                status: sinon.spy(),
+                send: sinon.spy(),
+                json: sinon.spy()
+            }
+
+        })
+
+        it('should handle errors when saving to database', function () {
+            offeringController.put(reqWithSaveError, res)
+            res.status.calledWith(500).should.be.true
+            res.send.calledWith('error').should.be.true
+        })
+
+        it('should return saved offering on successful save', function () {
+            offeringController.put(reqWithSuccessfulSave, res)
+
+            res.json.calledWith(reqWithSuccessfulSave.offering).should.be.true
+        })
+    })
 })

@@ -52,8 +52,10 @@ var offeringController = function (Offering) {
         req.offering.cusipId = req.body.cusipId
         req.offering.description = req.body.description
         req.offering.save(function (err) {
-            if (err)
-                res.status(500).send(err)
+            if (err) {
+                res.status(500)
+                res.send(err)
+            }
             else
                 res.json(req.offering)
         })
