@@ -58,6 +58,8 @@ describe('Offering Controller Tests:', function () {
                 cb(null, ['offering 1', 'offering 2', 'offering 3'])
             }
         }
+        var OfferingWithSpyOnFindFunction;
+        var queryWithNoCusipId = {}
 
         beforeEach(function () {
             res = {
@@ -67,6 +69,9 @@ describe('Offering Controller Tests:', function () {
             }
             req = {
                 query: {}
+            }
+            OfferingWithSpyOnFindFunction = {
+                find: sinon.spy()
             }
         })
 
@@ -85,6 +90,20 @@ describe('Offering Controller Tests:', function () {
             res.json.calledOnce.should.equal(true, 'send not called for successful GET')
             res.json.calledWith(['offering 1', 'offering 2', 'offering 3']).should.equal(true, 'offerings returned from database not sent in response')
             done()
+        })
+
+        it('should get offering by cusip ID', function () {
+            req.query.cusipId = '12345'
+            var offeringController = require('../controller/offeringController')(OfferingWithSpyOnFindFunction)
+            offeringController.get(req, res)
+
+            OfferingWithSpyOnFindFunction.find.calledWith({ cusipId: '12345' }).should.equal(true, 'Cusip ID not used to get Offering')
+        })
+
+        it('should get all offerings if no cusip ID available', function () {
+            var offeringController = require('../controller/offeringController')(OfferingWithSpyOnFindFunction)
+            offeringController.get(req, res)
+            OfferingWithSpyOnFindFunction.find.calledWith(queryWithNoCusipId).should.equal(true, 'Cusip ID should not have been passed as query parameter')
         })
     })
 })

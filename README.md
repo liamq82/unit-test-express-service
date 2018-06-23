@@ -13,11 +13,9 @@ Select 'run mocha' in run configurations beside green arrow.
 Click run
 
 <h2>MONGODB</h2>
-Start MongoDB
-sudo service mongod start
+Start MongoDB: sudo service mongod start
 
-Stop MongoDB
-sudo service mongod stop
+Stop MongoDB: sudo service mongod stop
 
 Verify Startup
 less /var/log/mongodb/mongod.log

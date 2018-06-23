@@ -16,6 +16,4 @@ offeringRouter = require('./Routes/offeringsRoutes')(Offering)
 
 app.use('/api/Offerings', offeringRouter)
 
-app.get('/', (req, res) => res.send('hello world!'))
-
 app.listen(port, () => console.log('listening on port ', port))
