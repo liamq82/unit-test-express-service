@@ -28,9 +28,40 @@ var offeringController = function (Offering) {
         })
     }
 
+    var getByIdMiddleware = function (req, res, next) {
+        Offering.findById(req.params.offeringId, function (err, offering) {
+            if (err)
+                res.status(500).send(err)
+            else if (offering) {
+                req.offering = offering
+                next()
+            } else
+                res.status(404).send('no offering found')
+        })
+
+    }
+
+    var getById = function (req, res) {
+        res.json(req.offering)
+    }
+
+    var put = function (req, res) {
+        req.offering.cusipId = req.body.cusipId
+        req.offering.description = req.body.description
+        req.offering.save(function (err) {
+            if (err)
+                res.status(500).send(err)
+            else
+                res.json(req.offering)
+        })
+    }
+
     return {
         post: post,
-        get: get
+        get: get,
+        getByIdMiddleware: getByIdMiddleware,
+        getById: getById,
+        put: put
     }
 }
 
