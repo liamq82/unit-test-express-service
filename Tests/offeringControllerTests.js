@@ -1,4 +1,4 @@
-var should = require('should'),
+var should = require('chai').should(),
     sinon = require('sinon');
 
 describe('Offering Controller Tests:', function () {
@@ -26,8 +26,8 @@ describe('Offering Controller Tests:', function () {
             }
             offeringController.post(req, res)
 
-            res.status.calledWith(400).should.equal(true, 'Bad status' + res.status.args[0][0])
-            res.send.calledWith('Cusip ID is required').should.equal(true)
+            res.status.calledWith(400).should.be.true
+            res.send.calledWith('Cusip ID is required').should.be.true
         })
 
         it('should save valid offerings', function () {
@@ -168,6 +168,25 @@ describe('Offering Controller Tests:', function () {
 
             res.status.calledWith(404).should.equal(true, 'status not set to 404 when no offering found')
             res.send.calledWith('no offering found').should.equal(true, 'should call send with "no offering found"')
+        })
+    })
+
+    describe('GET by ID', function () {
+        var Offering = {}
+        var retrievedOffering = {
+            cusipId: '12345',
+            description: 'Offering retrieved from database'
+        }
+        var offeringController = require('../controller/offeringController')(Offering)
+        var req = {
+            offering: retrievedOffering
+        }
+        var res = {
+            json: sinon.spy()
+        }
+        it('should return an offering', function () {
+            offeringController.getById(req, res)
+            res.json.calledWith(retrievedOffering).should.equal(true, 'GET by ID did not return offering')
         })
     })
 })
