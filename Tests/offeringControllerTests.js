@@ -108,27 +108,51 @@ describe('Offering Controller Tests:', function () {
     })
 
     describe('Get by ID middleware', function () {
-        it('should return error 500 if there is a server error', function () {
-            var Offering = {
-                findById: function (id, cb) {
-                    cb('error')
-                }
+
+        var OfferingThatReturnsError = {
+            findById: function (id, cb) {
+                cb('error')
             }
-            var offeringController = require('../controller/offeringController')(Offering)
-            var req = {
+        }
+        var offeringControllerThatReturnsError = require('../controller/offeringController')(OfferingThatReturnsError)
+
+        var offeringRetrievedFromDatabase = { cusipId: '12345', description: 'My offering' }
+        var OfferingThatSuccessfullyGetsData = {
+            findById: function (id, cb) {
+                cb(null, offeringRetrievedFromDatabase)
+            }
+        }
+        var offeringControllerSuccess = require('../controller/offeringController')(OfferingThatSuccessfullyGetsData)
+
+        var req
+        var res
+        var next
+
+        beforeEach(function () {
+            req = {
                 params: {
                     offeringId: '12345'
                 }
             }
-            var res = {
+            res = {
                 status: sinon.spy(),
                 send: sinon.spy()
             }
-            var next = {}
-            offeringController.getByIdMiddleware(req, res, next)
+            next = sinon.spy()
+        })
+
+        it('should handle server errors', function () {
+            offeringControllerThatReturnsError.getByIdMiddleware(req, res, next)
 
             res.status.calledWith(500).should.equal(true, 'Server error did not set status as 500')
+            res.send.calledWith('error').should.equal(true, 'Server error did not return errom message')
+        })
 
+        it('should successfully retrive offerings', function () {
+            offeringControllerSuccess.getByIdMiddleware(req, res, next)
+
+            next.calledOnce.should.equal(true, 'Next should be called if an offering is retrieved from database')
+            req.offering.should.equal(offeringRetrievedFromDatabase, 'Offering was not added to request')
         })
     })
 })
