@@ -30,9 +30,10 @@ var offeringController = function (Offering) {
 
     var getByIdMiddleware = function (req, res, next) {
         Offering.findById(req.params.offeringId, function (err, offering) {
-            if (err)
-                res.status(500).send(err)
-            else if (offering) {
+            if (err) {
+                res.status(500)
+                res.send(err)
+            } else if (offering) {
                 req.offering = offering
                 next()
             } else

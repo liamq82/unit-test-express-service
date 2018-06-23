@@ -106,4 +106,29 @@ describe('Offering Controller Tests:', function () {
             OfferingWithSpyOnFindFunction.find.calledWith(queryWithNoCusipId).should.equal(true, 'Cusip ID should not have been passed as query parameter')
         })
     })
+
+    describe('Get by ID middleware', function () {
+        it('should return error 500 if there is a server error', function () {
+            var Offering = {
+                findById: function (id, cb) {
+                    cb('error')
+                }
+            }
+            var offeringController = require('../controller/offeringController')(Offering)
+            var req = {
+                params: {
+                    offeringId: '12345'
+                }
+            }
+            var res = {
+                status: sinon.spy(),
+                send: sinon.spy()
+            }
+            var next = {}
+            offeringController.getByIdMiddleware(req, res, next)
+
+            res.status.calledWith(500).should.equal(true, 'Server error did not set status as 500')
+
+        })
+    })
 })
