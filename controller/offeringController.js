@@ -56,12 +56,39 @@ var offeringController = function (Offering) {
         })
     }
 
+    var patch = function (req, res) {
+        if (req.body._id)
+            delete req.body._id
+
+        for (var key in req.body) {
+            req.offering[key] = req.body[key]
+        }
+
+        req.offering.save(function (err) {
+            if (err)
+                res.status(500).send(err)
+            else
+                res.json(req.offering)
+        })
+    }
+
+    var deleteOffering = function (req, res) {
+        req.offering.remove(function (err) {
+            if (err)
+                res.status(500).send(err)
+            else
+                res.status(204).send('Removed')
+        })
+    }
+
     return {
         post: post,
         get: get,
         getByIdMiddleware: getByIdMiddleware,
         getById: getById,
-        put: put
+        put: put,
+        patch: patch,
+        delete: deleteOffering
     }
 }
 
