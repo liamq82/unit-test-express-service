@@ -124,6 +124,14 @@ describe('Offering Controller Tests:', function () {
         }
         var offeringControllerSuccess = require('../controller/offeringController')(OfferingThatSuccessfullyGetsData)
 
+
+        var OfferingThatReturnsNoData = {
+            findById: function (id, cb) {
+                cb(null, null)
+            }
+        }
+        var offeringControllerNoOfferingFound = require('../controller/offeringController')(OfferingThatReturnsNoData)
+
         var req
         var res
         var next
@@ -153,6 +161,13 @@ describe('Offering Controller Tests:', function () {
 
             next.calledOnce.should.equal(true, 'Next should be called if an offering is retrieved from database')
             req.offering.should.equal(offeringRetrievedFromDatabase, 'Offering was not added to request')
+        })
+
+        it('should handle no offering found', function () {
+            offeringControllerNoOfferingFound.getByIdMiddleware(req, res, next)
+
+            res.status.calledWith(404).should.equal(true, 'status not set to 404 when no offering found')
+            res.send.calledWith('no offering found').should.equal(true, 'should call send with "no offering found"')
         })
     })
 })

@@ -36,8 +36,10 @@ var offeringController = function (Offering) {
             } else if (offering) {
                 req.offering = offering
                 next()
-            } else
-                res.status(404).send('no offering found')
+            } else {
+                res.status(404)
+                res.send('no offering found')
+            }
         })
 
     }
