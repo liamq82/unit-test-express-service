@@ -14,20 +14,9 @@ app.use(bodyParser.urlencoded({ extended: true }))
 app.use(bodyParser.json())
 
 offeringRouter = require('./Routes/offeringsRoutes')(Offering)
+userRegistrationRouter = require('./Routes/userRoutes')(User)
 
 app.use('/api/Offerings', offeringRouter)
-
-// User registration
-app.post('/api/register', function (req, res) {
-    var user = new User(req.body)
-    user.save(function (err) {
-        if (err) {
-            res.status(500)
-            res.send(err)
-        }
-        else
-            res.json(user)
-    })
-})
+app.use('/api/register', userRegistrationRouter)
 
 app.listen(port, () => console.log('listening on port ', port))
