@@ -15,8 +15,10 @@ app.use(bodyParser.json())
 
 offeringRouter = require('./Routes/offeringsRoutes')(Offering)
 userRegistrationRouter = require('./Routes/userRoutes')(User)
+loginRouter = require('./Routes/loginRouter')(User)
 
 app.use('/api/Offerings', offeringRouter)
 app.use('/api/register', userRegistrationRouter)
+app.use('/api/login', loginRouter)
 
 app.listen(port, () => console.log('listening on port ', port))
