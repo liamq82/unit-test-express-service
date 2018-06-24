@@ -11,7 +11,7 @@ var loginController = function (User, jwt, bcrypt) {
                         res.status(401)
                         res.send({ message: 'invalid email or password' })
                     } else {
-                        var payload = {}
+                        var payload = { sub: user._id }
                         var token = jwt.encode(payload, '123')
                         res.status(200)
                         res.send({ token: token })
