@@ -1,7 +1,8 @@
 var express = require('express'),
     mongoose = require('mongoose'),
     bodyParser = require('body-parser'),
-    jwt = require('jwt-simple')
+    jwt = require('jwt-simple'),
+    bcrypt = require('bcrypt-nodejs')
 
 var db = mongoose.connect('mongodb://localhost/offeringAPI')
 var Offering = require('./models/offeringModel')
@@ -16,7 +17,7 @@ app.use(bodyParser.json())
 
 offeringRouter = require('./Routes/offeringsRoutes')(Offering)
 userRegistrationRouter = require('./Routes/userRoutes')(User)
-loginRouter = require('./Routes/loginRouter')(User, jwt)
+loginRouter = require('./Routes/loginRouter')(User, jwt, bcrypt)
 
 app.use('/api/Offerings', offeringRouter)
 app.use('/api/register', userRegistrationRouter)
