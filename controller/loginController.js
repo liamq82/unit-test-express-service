@@ -1,4 +1,4 @@
-var loginController = function (User) {
+var loginController = function (User, jwt) {
 
     var post = function (req, res) {
         User.findOne({ email: req.body.email }, function (err, user) {
@@ -10,8 +10,12 @@ var loginController = function (User) {
                 res.send({ message: 'invalid email or password' })
             } else if (user.password !== req.body.password) {
                 res.send({ message: 'invalid email or password' })
-            } else
-                res.json(user)
+            } else {
+                var payload = {}
+                var token = jwt.encode(payload, '123')
+                res.status(200)
+                res.send({ token: token })
+            }
         })
     }
 

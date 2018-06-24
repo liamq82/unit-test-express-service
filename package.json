@@ -15,6 +15,7 @@
     "gulp": "^3.9.1",
     "gulp-mocha": "^6.0.0",
     "gulp-nodemon": "^2.2.1",
+    "jwt-simple": "^0.5.1",
     "mongoose": "^5.1.5",
     "should": "^13.2.1",
     "sinon": "^6.0.0"

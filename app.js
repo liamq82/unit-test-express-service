@@ -1,6 +1,7 @@
 var express = require('express'),
     mongoose = require('mongoose'),
-    bodyParser = require('body-parser')
+    bodyParser = require('body-parser'),
+    jwt = require('jwt-simple')
 
 var db = mongoose.connect('mongodb://localhost/offeringAPI')
 var Offering = require('./models/offeringModel')
@@ -15,7 +16,7 @@ app.use(bodyParser.json())
 
 offeringRouter = require('./Routes/offeringsRoutes')(Offering)
 userRegistrationRouter = require('./Routes/userRoutes')(User)
-loginRouter = require('./Routes/loginRouter')(User)
+loginRouter = require('./Routes/loginRouter')(User, jwt)
 
 app.use('/api/Offerings', offeringRouter)
 app.use('/api/register', userRegistrationRouter)
