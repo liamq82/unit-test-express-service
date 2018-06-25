@@ -1,6 +1,6 @@
 var loginController = function (User, jwt, bcrypt) {
 
-    var post = function (req, res) {
+    var login = function (req, res) {
         User.findOne({ email: req.body.email }, function (err, user) {
             if (err) {
                 res.status(500)
@@ -22,7 +22,7 @@ var loginController = function (User, jwt, bcrypt) {
     }
 
     return {
-        post: post
+        login: login
     }
 }
 

@@ -6,7 +6,7 @@ var routes = function (User, jwt, bcrypt) {
     var loginController = require('../controller/loginController')(User, jwt, bcrypt)
 
     loginRouter.route('/')
-        .post(loginController.post)
+        .post(loginController.login)
 
     return loginRouter
 }
