@@ -6,7 +6,13 @@ var authController = function (User, jwt) {
             res.send({ message: 'Unauthorized. Missing authorization token.' })
         } else {
             var token = req.header('token')
-            var payload = jwt.decode(token, '123')
+            var payload
+            try {
+                payload = jwt.decode(token, '123')
+            }
+            catch (err) {
+                console.log('token threw error!!!!!!!!!!!!!!!!!!!!')
+            }
             if (!payload) {
                 res.status(401)
                 res.send({ message: 'Unauthorized. Auth token invalid.' })
