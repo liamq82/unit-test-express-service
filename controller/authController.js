@@ -11,15 +11,12 @@ var authController = function (User, jwt) {
                 payload = jwt.decode(token, '123')
             }
             catch (err) {
-                console.log('token threw error!!!!!!!!!!!!!!!!!!!!')
-            }
-            if (!payload) {
                 res.status(401)
                 res.send({ message: 'Unauthorized. Auth token invalid.' })
-            } else {
-                req.userId = payload.sub
-                next()
+                return
             }
+            req.userId = payload.sub
+            next()
         }
     }
 
