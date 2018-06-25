@@ -20,9 +20,9 @@ offeringRouter = require('./Routes/offeringsRoutes')(Offering)
 userRegistrationRouter = require('./Routes/userRoutes')(User)
 loginRouter = require('./Routes/loginRouter')(User, jwt, bcrypt)
 
-app.use('/', authRouter)
+app.use('/api', authRouter)
 app.use('/api/Offerings', offeringRouter)
-app.use('/api/register', userRegistrationRouter)
-app.use('/api/login', loginRouter)
+app.use('/auth/register', userRegistrationRouter)
+app.use('/auth/login', loginRouter)
 
 app.listen(port, () => console.log('listening on port ', port))
