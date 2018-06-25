@@ -3,6 +3,7 @@ var should = require('chai').should(),
 
 describe('Auth Controller Tests:', function () {
     describe('Authenticate User', function () {
+        var User
         var validToken = 'abc123def456'
         var invalidToken = 'odoeiuyd34566'
         var userId = '123xyz'
@@ -14,6 +15,7 @@ describe('Auth Controller Tests:', function () {
         var next
 
         beforeEach(function () {
+            User = {}
             mockRequestWithNoHeader = {
                 header: function () {
                     return undefined
@@ -43,11 +45,11 @@ describe('Auth Controller Tests:', function () {
                 send: sinon.spy()
             }
             next = sinon.spy()
-            authController = require('../controller/authController')(jwt)
+            authController = require('../controller/authController')(User, jwt)
         })
 
         it('should set response status to 401 and send error message if no token in header', function () {
-            authController.authenticateUser(mockRequestWithNoHeader, res, next)
+            authController.authenticateUserPassword(mockRequestWithNoHeader, res, next)
 
             res.status.calledOnce.should.be.true
             res.send.calledOnce.should.be.true
@@ -56,7 +58,7 @@ describe('Auth Controller Tests:', function () {
         })
 
         it('should set response status to 401 and send error message if token is invalid', function () {
-            authController.authenticateUser(mockRequestWithInvalidToken, res, next)
+            authController.authenticateUserPassword(mockRequestWithInvalidToken, res, next)
 
             res.status.calledOnce.should.be.true
             res.send.calledOnce.should.be.true
@@ -65,12 +67,56 @@ describe('Auth Controller Tests:', function () {
         })
 
         it('should add user id to request object if header token is valid', function () {
-            authController.authenticateUser(requestWithValidToken, res, next)
+            authController.authenticateUserPassword(requestWithValidToken, res, next)
 
             requestWithValidToken.userId.should.equal(userId)
             next.calledOnce.should.be.true
             res.status.notCalled.should.be.true
             res.send.notCalled.should.be.true
         })
+    })
+
+    describe('Authenticate user in database', function () {
+        var User
+        var userId
+        var jwt = {}
+        var authController
+        var req
+        var res = {}
+        var next
+
+        beforeEach(function () {
+            req = {
+                userId: userId
+            }
+            next = sinon.spy()
+            User = {
+                findById: sinon.spy()
+            }
+            userId = 'abc123xyz456'
+            authController = require('../controller/authController')(User, jwt)
+        })
+
+        it('should call next if user is found in database', function () {
+            authController.authenticateUserInDatabase(req, res, next)
+
+            next.calledOnce.should.be.true
+        })
+
+        it('should search for a user in the database', function () {
+            authController.authenticateUserInDatabase(req, res, next)
+
+            User.findById.calledOnce.should.be.true
+            next.calledOnce.should.be.true
+        })
+
+        it('should search for a user in the database by id', function () {
+            authController.authenticateUserInDatabase(req, res, next)
+
+            User.findById.calledWith(userId).should.be.true
+            User.findById.calledOnce.should.be.true
+            next.calledOnce.should.be.true
+        })
+
     })
 })

@@ -1,6 +1,6 @@
-var authController = function (jwt) {
+var authController = function (User, jwt) {
 
-    var authenticateUser = function (req, res, next) {
+    var authenticateUserPassword = function (req, res, next) {
         var token = req.header('token')
         var payload
         try {
@@ -16,8 +16,14 @@ var authController = function (jwt) {
         }
     }
 
+    var authenticateUserInDatabase = function (req, res, next) {
+        User.findById(req.userId)
+        next()
+    }
+
     return {
-        authenticateUser: authenticateUser
+        authenticateUserPassword: authenticateUserPassword,
+        authenticateUserInDatabase: authenticateUserInDatabase
     }
 }
 
