@@ -6,7 +6,6 @@ describe('Auth Controller Tests:', function () {
         var validToken = 'abc123def456'
         var invalidToken = 'odoeiuyd34566'
         var userId = '123xyz'
-        var User
         var jwt
         var authController
         var mockRequestWithNoHeader
@@ -15,7 +14,6 @@ describe('Auth Controller Tests:', function () {
         var next
 
         beforeEach(function () {
-            User = {}
             mockRequestWithNoHeader = {
                 header: function () {
                     return undefined
@@ -45,7 +43,7 @@ describe('Auth Controller Tests:', function () {
                 send: sinon.spy()
             }
             next = sinon.spy()
-            authController = require('../controller/authController')(User, jwt)
+            authController = require('../controller/authController')(jwt)
         })
 
         it('should set response status to 401 and send error message if no token in header', function () {

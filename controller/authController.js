@@ -1,4 +1,4 @@
-var authController = function (User, jwt) {
+var authController = function (jwt) {
 
     var authenticateUser = function (req, res, next) {
         var token = req.header('token')

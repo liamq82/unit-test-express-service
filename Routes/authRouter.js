@@ -1,9 +1,9 @@
 var express = require('express')
 
-var routes = function (User, jwt) {
+var routes = function (jwt) {
     var authRouter = express.Router()
 
-    var authController = require('../controller/authController')(User, jwt)
+    var authController = require('../controller/authController')(jwt)
 
     authRouter.use('/', authController.authenticateUser)
 

@@ -15,12 +15,16 @@ var port = process.env.PORT || 8000;
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use(bodyParser.json())
 
-authRouter = require('./Routes/authRouter')(User, jwt)
+authRouter = require('./Routes/authRouter')(jwt)
 offeringRouter = require('./Routes/offeringsRoutes')(Offering)
 userRegistrationRouter = require('./Routes/userRoutes')(User)
 loginRouter = require('./Routes/loginRouter')(User, jwt, bcrypt)
 
 app.use('/api', authRouter)
+app.use('/api', function (req, res, next) {
+    console.log('check user in database!!!!!!!!!!!!!!!!!!!!')
+    next()
+})
 app.use('/api/Offerings', offeringRouter)
 app.use('/auth/register', userRegistrationRouter)
 app.use('/auth/login', loginRouter)
