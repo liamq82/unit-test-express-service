@@ -108,7 +108,7 @@ describe('Auth Controller Tests:', function () {
 
         it('should search for a user in the database', function () {
             User.findById = sinon.spy()
-            authController.authenticateUserInDatabase(req, res, next)
+            authController.validateUserInDatabase(req, res, next)
 
             User.findById.calledOnce.should.be.true
         })
@@ -116,13 +116,13 @@ describe('Auth Controller Tests:', function () {
         it('should search for user by user id', function () {
             User.findById = sinon.spy()
 
-            authController.authenticateUserInDatabase(req, res, next)
+            authController.validateUserInDatabase(req, res, next)
 
             sinon.assert.calledWith(User.findById, userId)
         })
 
         it('should call next if a user is found in the database', function () {
-            authController.authenticateUserInDatabase(req, res, next)
+            authController.validateUserInDatabase(req, res, next)
 
             next.calledOnce.should.be.true
         })
@@ -131,7 +131,7 @@ describe('Auth Controller Tests:', function () {
             User.findById = function (userId, cb) {
                 cb('error', undefined)
             }
-            authController.authenticateUserInDatabase(req, res, next)
+            authController.validateUserInDatabase(req, res, next)
 
             next.calledOnce.should.be.false
         })
@@ -140,7 +140,7 @@ describe('Auth Controller Tests:', function () {
             User.findById = function (userId, cb) {
                 cb('error', undefined)
             }
-            authController.authenticateUserInDatabase(req, res, next)
+            authController.validateUserInDatabase(req, res, next)
 
             res.status.calledWith(500).should.be.true
         })
@@ -149,7 +149,7 @@ describe('Auth Controller Tests:', function () {
             User.findById = function (userId, cb) {
                 cb('error', undefined)
             }
-            authController.authenticateUserInDatabase(req, res, next)
+            authController.validateUserInDatabase(req, res, next)
 
             res.send.calledWith('error').should.be.true
         })
@@ -158,7 +158,7 @@ describe('Auth Controller Tests:', function () {
             User.findById = function (userId, cb) {
                 cb(undefined, null)
             }
-            authController.authenticateUserInDatabase(req, res, next)
+            authController.validateUserInDatabase(req, res, next)
 
             sinon.assert.notCalled(next)
         })

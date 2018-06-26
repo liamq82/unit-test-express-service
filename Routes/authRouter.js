@@ -7,7 +7,7 @@ var routes = function (User, jwt) {
 
     authRouter.use('/', authController.authenticateUserPassword)
 
-    authRouter.use('/', authController.authenticateUserInDatabase)
+    authRouter.use('/', authController.validateUserInDatabase)
 
     return authRouter
 }

@@ -16,7 +16,7 @@ var authController = function (User, jwt) {
         }
     }
 
-    var authenticateUserInDatabase = function (req, res, next) {
+    var validateUserInDatabase = function (req, res, next) {
         User.findById(req.userId, function (err, user) {
             if (err) {
                 res.status(500)
@@ -29,7 +29,7 @@ var authController = function (User, jwt) {
 
     return {
         authenticateUserPassword: authenticateUserPassword,
-        authenticateUserInDatabase: authenticateUserInDatabase
+        validateUserInDatabase: validateUserInDatabase
     }
 }
 
