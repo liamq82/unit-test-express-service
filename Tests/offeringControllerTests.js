@@ -5,7 +5,8 @@ describe('Offering Controller Tests:', function () {
     describe('Post', function () {
 
         var Offering = function (offering) {
-            this.save = function () {
+            this.save = function (cb) {
+                cb(undefined)
             }
         }
         var offeringController = require('../controller/offeringController')(Offering)

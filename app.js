@@ -4,7 +4,13 @@ var express = require('express'),
     jwt = require('jwt-simple'),
     bcrypt = require('bcrypt-nodejs')
 
-var db = mongoose.connect('mongodb://localhost/offeringAPI')
+var db
+
+if (process.env.ENV === 'Test')
+    db = mongoose.connect('mongodb://localhost/offeringAPI_test')
+else
+    db = mongoose.connect('mongodb://localhost/offeringAPI')
+
 var Offering = require('./models/offeringModel')
 var User = require('./models/user')
 
@@ -26,3 +32,5 @@ app.use('/auth/register', userRegistrationRouter)
 app.use('/auth/login', loginRouter)
 
 app.listen(port, () => console.log('listening on port ', port))
+
+module.exports = app

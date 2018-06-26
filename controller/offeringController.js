@@ -6,9 +6,16 @@ var offeringController = function (Offering) {
             res.status(400)
             res.send('Cusip ID is required')
         } else {
-            offering.save()
-            res.status(201)
-            res.send(offering)
+            offering.save(function (err) {
+                if (err) {
+                    res.status(500)
+                    res.send(err)
+                }
+                else {
+                    res.status(201)
+                    res.send(offering)
+                }
+            })
         }
 
     }
