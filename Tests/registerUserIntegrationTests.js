@@ -6,7 +6,7 @@ var expect = require('chai').expect,
     agent = request.agent(app)
 
 describe('Register User Tests:', function () {
-    it.only('should allow a new user to register', function (done) {
+    xit('should allow a new user to register', function (done) {
         var newUser = {
             'email': 'gar@gmail.com',
             'password': '12345'

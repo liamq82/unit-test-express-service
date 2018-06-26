@@ -23,7 +23,7 @@ app.use(bodyParser.json())
 
 authRouter = require('./Routes/authRouter')(User, jwt)
 offeringRouter = require('./Routes/offeringsRoutes')(Offering)
-userRegistrationRouter = require('./Routes/userRoutes')(User)
+userRegistrationRouter = require('./Routes/userRegistrationRouter')(User, jwt)
 loginRouter = require('./Routes/loginRouter')(User, jwt, bcrypt)
 
 app.use('/api', authRouter)
