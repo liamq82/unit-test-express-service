@@ -77,46 +77,90 @@ describe('Auth Controller Tests:', function () {
     })
 
     describe('Authenticate user in database', function () {
+
         var User
+        var mockUser
         var userId
         var jwt = {}
         var authController
         var req
-        var res = {}
+        var res
         var next
 
         beforeEach(function () {
+            userId = '1232nth4nd4123ds54nth'
+            mockUser = {}
             req = {
                 userId: userId
             }
+            res = {
+                status: sinon.spy(),
+                send: sinon.spy()
+            }
             next = sinon.spy()
             User = {
-                findById: sinon.spy()
+                findById: function (userId, cb) {
+                    cb(undefined, mockUser)
+                }
             }
-            userId = 'abc123xyz456'
             authController = require('../controller/authController')(User, jwt)
         })
 
-        it('should call next if user is found in database', function () {
-            authController.authenticateUserInDatabase(req, res, next)
-
-            next.calledOnce.should.be.true
-        })
-
         it('should search for a user in the database', function () {
+            User.findById = sinon.spy()
             authController.authenticateUserInDatabase(req, res, next)
 
             User.findById.calledOnce.should.be.true
-            next.calledOnce.should.be.true
         })
 
-        it('should search for a user in the database by id', function () {
+        it('should search for user by user id', function () {
+            User.findById = sinon.spy()
+
             authController.authenticateUserInDatabase(req, res, next)
 
-            User.findById.calledWith(userId).should.be.true
-            User.findById.calledOnce.should.be.true
+            sinon.assert.calledWith(User.findById, userId)
+        })
+
+        it('should call next if a user is found in the database', function () {
+            authController.authenticateUserInDatabase(req, res, next)
+
             next.calledOnce.should.be.true
         })
 
+        it('should not call next if a database error occurs', function () {
+            User.findById = function (userId, cb) {
+                cb('error', undefined)
+            }
+            authController.authenticateUserInDatabase(req, res, next)
+
+            next.calledOnce.should.be.false
+        })
+
+        it('should set error code 500 if database error occurs', function () {
+            User.findById = function (userId, cb) {
+                cb('error', undefined)
+            }
+            authController.authenticateUserInDatabase(req, res, next)
+
+            res.status.calledWith(500).should.be.true
+        })
+
+        it('should send error message if database error occurs', function () {
+            User.findById = function (userId, cb) {
+                cb('error', undefined)
+            }
+            authController.authenticateUserInDatabase(req, res, next)
+
+            res.send.calledWith('error').should.be.true
+        })
+
+        it('should not call next if no user is found in the database', function () {
+            User.findById = function (userId, cb) {
+                cb(undefined, null)
+            }
+            authController.authenticateUserInDatabase(req, res, next)
+
+            sinon.assert.notCalled(next)
+        })
     })
 })

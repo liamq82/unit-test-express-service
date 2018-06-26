@@ -17,8 +17,14 @@ var authController = function (User, jwt) {
     }
 
     var authenticateUserInDatabase = function (req, res, next) {
-        User.findById(req.userId)
-        next()
+        User.findById(req.userId, function (err, user) {
+            if (err) {
+                res.status(500)
+                res.send(err)
+            }
+            if (user)
+                next()
+        })
     }
 
     return {
