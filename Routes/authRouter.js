@@ -5,7 +5,7 @@ var routes = function (User, jwt) {
 
     var authController = require('../controller/authController')(User, jwt)
 
-    authRouter.use('/', authController.authenticateUserPassword)
+    authRouter.use('/', authController.validateUserPassword)
 
     authRouter.use('/', authController.validateUserInDatabase)
 

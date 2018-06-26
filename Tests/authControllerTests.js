@@ -49,7 +49,7 @@ describe('Auth Controller Tests:', function () {
         })
 
         it('should set response status to 401 and send error message if no token in header', function () {
-            authController.authenticateUserPassword(mockRequestWithNoHeader, res, next)
+            authController.validateUserPassword(mockRequestWithNoHeader, res, next)
 
             res.status.calledOnce.should.be.true
             res.send.calledOnce.should.be.true
@@ -58,7 +58,7 @@ describe('Auth Controller Tests:', function () {
         })
 
         it('should set response status to 401 and send error message if token is invalid', function () {
-            authController.authenticateUserPassword(mockRequestWithInvalidToken, res, next)
+            authController.validateUserPassword(mockRequestWithInvalidToken, res, next)
 
             res.status.calledOnce.should.be.true
             res.send.calledOnce.should.be.true
@@ -67,7 +67,7 @@ describe('Auth Controller Tests:', function () {
         })
 
         it('should add user id to request object if header token is valid', function () {
-            authController.authenticateUserPassword(requestWithValidToken, res, next)
+            authController.validateUserPassword(requestWithValidToken, res, next)
 
             requestWithValidToken.userId.should.equal(userId)
             next.calledOnce.should.be.true
