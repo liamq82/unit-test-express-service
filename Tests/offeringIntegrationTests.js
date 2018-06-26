@@ -7,24 +7,30 @@ var should = require('should'),
     agent = request.agent(app)
 
 describe('Offering CRUD Tests:', function () {
+    var token
+
     beforeEach(function (done) {
-        var offering = new Offering({ cusipId: '12345', description: 'test cusip' })
-        offering.save(function (err, res) {
-            if (err)
-                console.log(err)
-            else {
-                console.log('offering saved')
-            }
-            done()
-        })
+        var newUser = {
+            'email': 'liam@gmail.com',
+            'password': '12345'
+        }
+
+        agent.post('/auth/register')
+            .send(newUser)
+            .expect(200)
+            .end(function (err, results) {
+                token = results.body.token
+                done()
+            })
     })
-    xit('should allow an offering to be posted and return and _id', function (done) {
+    it('should allow an offering to be posted and return and _id', function (done) {
         var offeringPost = {
             "cusipId": "123987",
             "description": "new offering"
         }
 
         agent.post('/api/Offerings')
+            .set({ 'token': token })
             .send(offeringPost)
             .expect(200)
             .end(function (err, results) {

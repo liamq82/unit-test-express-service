@@ -6,9 +6,12 @@ var expect = require('chai').expect,
     agent = request.agent(app)
 
 describe('Register User Tests:', function () {
-    xit('should allow a new user to register', function (done) {
+
+    var token
+
+    beforeEach(function (done) {
         var newUser = {
-            'email': 'gar@gmail.com',
+            'email': 'liam@gmail.com',
             'password': '12345'
         }
 
@@ -16,7 +19,23 @@ describe('Register User Tests:', function () {
             .send(newUser)
             .expect(200)
             .end(function (err, results) {
-                expect(results.body.email).to.equal('gar@gmail.com')
+                expect(results.status).to.equal(200)
+                token = results.body.token
+                done()
+            })
+    })
+
+    it('should allow a new user to register', function (done) {
+        var newUser = {
+            'email': 'liam@gmail.com',
+            'password': '12345'
+        }
+
+        agent.post('/auth/register')
+            .send(newUser)
+            .expect(200)
+            .end(function (err, results) {
+                expect(results.status).to.equal(200)
                 done()
             })
     })
