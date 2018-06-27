@@ -4,6 +4,7 @@ var should = require('chai').should(),
 describe('Login Controller:', function () {
 
     describe('Login', function () {
+        var userModel
         var mockValidUser = { _id: '143tdc3n4coeb34', password: 'abc123defxys' }
         var mockToken = 'utoc3n234234b23nc'
         var mockModelThatThrowsDatabaseError
@@ -16,6 +17,7 @@ describe('Login Controller:', function () {
         var res
 
         beforeEach(function () {
+            userModel = {}
             mockModelThatThrowsDatabaseError = {
                 findOne(query, cb) {
                     cb('error')
@@ -44,7 +46,8 @@ describe('Login Controller:', function () {
             bcrypt = {}
             req = {
                 body: {
-                    email: 'john@gmail.com'
+                    email: 'john@gmail.com',
+                    password: '12345'
                 }
             }
             res = {
@@ -86,5 +89,24 @@ describe('Login Controller:', function () {
             res.send.calledWith({ token: mockToken }).should.be.true
             res.send.calledOnce.should.be.true
         })
+
+        it('should tell user email or password invalid if no email in request body', function () {
+            delete req.body.email
+            var loginController = require('../controller/loginController')(userModel, jwt, bcrypt)
+            loginController.login(req, res)
+
+            sinon.assert.calledWith(res.status, 401)
+            sinon.assert.calledWith(res.send, { message: 'invalid email or password' })
+        })
+
+        it('should tell user email or password invalid if no password in request body', function () {
+            delete req.body.password
+            var loginController = require('../controller/loginController')(userModel, jwt, bcrypt)
+            loginController.login(req, res)
+
+            sinon.assert.calledWith(res.status, 401)
+            sinon.assert.calledWith(res.send, { message: 'invalid email or password' })
+        })
+
     })
 })
