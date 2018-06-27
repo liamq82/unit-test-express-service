@@ -5,13 +5,11 @@ var expect = require('chai').expect,
     Offering = mongoose.model('Offering'),
     agent = request.agent(app)
 
-describe('Register User Tests:', function () {
+describe('User registration tests:', function () {
 
-    var token
-
-    beforeEach(function (done) {
+    it('should allow a new user to register using email and password', function (done) {
         var newUser = {
-            'email': 'liam@gmail.com',
+            'email': 'fake.email@gmail.com',
             'password': '12345'
         }
 
@@ -20,23 +18,9 @@ describe('Register User Tests:', function () {
             .expect(200)
             .end(function (err, results) {
                 expect(results.status).to.equal(200)
-                token = results.body.token
+                expect(results.body).to.have.all.keys('token')
                 done()
             })
     })
 
-    it('should allow a new user to register', function (done) {
-        var newUser = {
-            'email': 'liam@gmail.com',
-            'password': '12345'
-        }
-
-        agent.post('/auth/register')
-            .send(newUser)
-            .expect(200)
-            .end(function (err, results) {
-                expect(results.status).to.equal(200)
-                done()
-            })
-    })
 })
